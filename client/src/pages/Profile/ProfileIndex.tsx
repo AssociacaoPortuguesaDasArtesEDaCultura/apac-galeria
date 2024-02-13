@@ -1,24 +1,22 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import LogoutIcon from '@mui/icons-material/Logout';
-import HistoryIcon from '@mui/icons-material/History';
-import PhotoAlbumIcon from '@mui/icons-material/PhotoAlbum';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ProfileThumbnail from '../../components/Profile/ProfileThumbnail';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import HistoryIcon from '@mui/icons-material/History';
+import LogoutIcon from '@mui/icons-material/Logout';
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
-import { useTranslation } from 'react-i18next';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PhotoAlbumIcon from '@mui/icons-material/PhotoAlbum';
 import { Box } from '@mui/material';
-import { CurrentAccountContext } from '../../contexts/currentAccountContext';
+import { useTranslation } from 'react-i18next';
+import ProfileThumbnail from '../../components/Profile/ProfileThumbnail';
 //import { CurrentChatContext } from '../../contexts/chatContext';
 
 export default function ProfileIndex() {
     const [t] = useTranslation();
-    const { setLoggedIn, tokenLevel, setTokenLevel } = useContext(CurrentAccountContext);
     //const { disconnect } = useContext(CurrentChatContext);
+    const tokenLevel = 'client' as string;
 
     return (
         <Box
@@ -35,14 +33,18 @@ export default function ProfileIndex() {
                 justifyContent: 'center',
             }}>
             <div className="grid max-w-max max-h-max gap-2 md:gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 justify-center content-center items-center">
-                {(tokenLevel == 'seller' || tokenLevel == 'client') && <Link className="inline-block" to="/profile/info">
-                    <ProfileThumbnail
-                        title={t('profile.account.title')}
-                        description={t('profile.account.description')}
-                        icon={<AccountCircleIcon />}
-                    />
-                </Link>}
-                {(tokenLevel == 'seller' || tokenLevel == 'admin' || tokenLevel == 'client') && (
+                {(tokenLevel == 'seller' || tokenLevel == 'client') && (
+                    <Link className="inline-block" to="/profile/info">
+                        <ProfileThumbnail
+                            title={t('profile.account.title')}
+                            description={t('profile.account.description')}
+                            icon={<AccountCircleIcon />}
+                        />
+                    </Link>
+                )}
+                {(tokenLevel == 'seller' ||
+                    tokenLevel == 'admin' ||
+                    tokenLevel == 'client') && (
                     <Link className="inline-block" to="/profile/notifications">
                         <ProfileThumbnail
                             title={t('profile.notifications.title')}
@@ -107,8 +109,8 @@ export default function ProfileIndex() {
                         localStorage.removeItem('user');
                         localStorage.removeItem('token');
                         //disconnect();
-                        setLoggedIn(false);
-                        setTokenLevel("");
+                        // setLoggedIn(false);
+                        // setTokenLevel("");
                     }}>
                     <ProfileThumbnail
                         title={t('profile.logout')}

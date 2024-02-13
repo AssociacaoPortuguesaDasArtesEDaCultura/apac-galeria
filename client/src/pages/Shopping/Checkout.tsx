@@ -4,9 +4,9 @@ import Step from '@mui/material/Step';
 import Button from '@mui/material/Button';
 import { useRef, useState } from 'react';
 import { StepLabel } from '@mui/material';
-import CheckoutStep2 from '../components/CheckoutShippingAddressStep';
-import { CheckoutStep3 } from '../components/CheckoutReviewStep';
-import CheckoutStep4 from '../components/CheckoutPaymentStep';
+import CheckoutStep2 from '../../components/CheckoutShippingAddressStep';
+import { CheckoutStep3 } from '../../components/CheckoutReviewStep';
+import CheckoutStep4 from '../../components/CheckoutPaymentStep';
 import { useTranslation } from 'react-i18next';
 
 const Checkout = () => {
@@ -21,9 +21,9 @@ const Checkout = () => {
         // TODO step validation
         //if (!myForm.current.reportValidity()) return;
 
-        if (activeStep < 2){
+        if (activeStep < 2) {
             setActiveStep((cur) => cur + 1);
-        } 
+        }
     };
     const handlePrev = () => {
         if (activeStep > 0) setActiveStep((cur) => cur - 1);
@@ -56,12 +56,17 @@ const Checkout = () => {
                 </Step>
             </Stepper>
 
-            <Box component='div'>
+            <Box component="div">
                 {/* Steps content */}
-                
-                {activeStep === 0 && <CheckoutStep2 validate={validateStep} setValidFunc={setValidateStep}/>}
+
+                {activeStep === 0 && (
+                    <CheckoutStep2
+                        validate={validateStep}
+                        setValidFunc={setValidateStep}
+                    />
+                )}
                 {activeStep === 1 && <CheckoutStep3 />}
-                {activeStep === 2 && < CheckoutStep4 />}
+                {activeStep === 2 && <CheckoutStep4 />}
 
                 {/* Next and Prev buttons */}
                 <Box

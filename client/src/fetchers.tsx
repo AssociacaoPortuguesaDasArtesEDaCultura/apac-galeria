@@ -1,10 +1,9 @@
-import axios, { Axios, AxiosError, AxiosResponse } from 'axios';
-import { ProductType } from './types/product';
+import axios from 'axios';
+import { decodeToken } from 'react-jwt';
 import { NestedPartial } from './types/nestedPartial';
+import { ProductType } from './types/product';
 import { Result, err, ok } from './types/result';
 import { User } from './types/user';
-import { decodeToken } from 'react-jwt';
-import { StringKeyframeTrack } from 'three';
 //import mime from 'mime';
 
 const BASE_URL = 'http://localhost';
@@ -20,68 +19,6 @@ export const AUTH_URL = BASE_URL + ':11001';
 export const CHAT_URL = BASE_URL + ':11002';
 
 //export const BASE_URL = 'http:/192.168.1.68:8000/api';
-
-export const loginUser = async (email: string, password: string) => {
-    console.log('Logging in user');
-    console.log('credentials: ', email, '|', password);
-    try {
-        const response = await axios.post(`${AUTH_URL}/login`, {
-            username: email,
-            password,
-        });
-        console.log('resposta: ', response.data);
-        return response.data;
-    } catch (err) {
-        console.log('Error during login: ' + err.message);
-        return err.response;
-    }
-};
-
-export const fetchUser = async (id: string, level: string, token: string) => {
-    console.log('Fetching user ' + email);
-
-    if (level === 'admin' || level === 'client') {
-        try {
-            const response = await axios.get(
-                `${API_URL_USER}/client/${id}?token=${token}`
-            );
-            return response.data;
-        } catch (err) {
-            console.log('Error fetching client: ' + err.message);
-            throw err.message;
-        }
-    } else if (level === 'admin' || level === 'seller') {
-        try {
-            const response = await axios.get(
-                `${API_URL_USER}/seller/${id}?token=${token}`
-            );
-            return response.data;
-        } catch (err) {
-            console.log('Error fetching artist: ' + err.message);
-            throw err.message;
-        }
-    }
-};
-
-export const registerUser = async (body: FormData) => {
-    console.log('Registering user');
-    console.log('body: ', body);
-    var object = {};
-    body.forEach(function (value, key) {
-        object[key] = value;
-    });
-    var json = JSON.stringify(object);
-    console.log('json: ', object);
-
-    try {
-        const response = await axios.post(`${AUTH_URL}/registo`, object);
-        console.log('resposta: ', response.data);
-        return response.data;
-    } catch (err) {
-        console.log('Error during register: ' + err.message);
-        throw err.response;
-    }
-};
 
 export async function createOrder(body: [{ id: string; amount: number }]) {
     console.log('Creating Order');
@@ -442,4 +379,4 @@ export const getOrders = async (token: string, id: string) => {
         console.error(error);
         throw error;
     }
-}
+};

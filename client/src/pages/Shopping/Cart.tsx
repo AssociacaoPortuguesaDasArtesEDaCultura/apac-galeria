@@ -1,9 +1,9 @@
 import { Box, Link } from '@mui/material';
-import CartDetails from '../components/CartDetails';
+import CartDetails from '../../components/CartDetails';
 import { useNavigate } from 'react-router-dom';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useTranslation } from 'react-i18next';
-import { ReservationDetails } from '../components/ReservationDetails';
+import { ReservationDetails } from '../../components/ReservationDetails';
 
 const Cart = () => {
     const { t } = useTranslation();
@@ -21,9 +21,7 @@ const Cart = () => {
                 },
                 paddingY: '3rem',
             }}>
-
             <ReservationDetails />
-            
 
             <Link
                 component="button"

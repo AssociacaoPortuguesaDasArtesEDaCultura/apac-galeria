@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
 import {
-    Box,
-    TextField,
-    Button,
-    Typography,
-    Paper,
-    CssBaseline,
-    Grid,
     Alert,
+    Box,
+    Button,
+    CssBaseline,
+    Paper,
     Stack,
+    TextField,
+    Typography,
 } from '@mui/material';
-import { registerUser } from '../../fetchers';
-import { useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import CountrySelect from '../../components/pintar_o_7/CountrySelect';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import CountrySelect from '../../components/pintar_o_7/CountrySelect';
+import { newCustomer } from '../../types/user';
+import { saveUserInfo } from '../../utils/db';
+import { auth } from '../../utils/firebase';
 
 const Register = () => {
     const [t] = useTranslation();
@@ -88,7 +89,7 @@ const Register = () => {
         setShowPostalCodeError(false);
     };
 
-    const handleRegisto = async (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         disableAlerts();
 
@@ -110,18 +111,35 @@ const Register = () => {
             return;
         } else {
             disableAlerts();
-            let data = new FormData(e.target);
-            console.log('Body:', data);
-            data.set('client_fields.demographics.address.country', country);
+            // Use Firebase registration function
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    const customer = newCustomer(
+                        user.uid,
+                        email,
+                        name,
+                        new Date(birth_date),
+                        phone,
+                        {
+                            street: address,
+                            postalCode: postalCode,
+                            city: city,
+                            country: country,
+                        }
+                    );
 
-            try {
-                const response = await registerUser(data);
-                navigate('/login');
-            } catch (error) {
-                console.log(error);
-            }
-
-            // TO DO - verificar formatacao dos campos + fazer ligacao com backend
+                    saveUserInfo(customer);
+                    navigate('/gallery');
+                    return;
+                })
+                .catch((error) => {
+                    // const errorCode = error.code;
+                    // const errorMessage = error.message;
+                    // ..
+                    setShowError(true);
+                    console.log(error);
+                });
         }
     };
 
@@ -147,7 +165,7 @@ const Register = () => {
                     style={{ margin: '20px 0', color: 'black' }}>
                     {t('global.register')}
                 </Typography>
-                <form onSubmit={handleRegisto} style={{ width: '100%' }}>
+                <form onSubmit={handleRegister} style={{ width: '100%' }}>
                     {/* ----------- EMAIL ---------------- */}
                     {showEmailAlert && (
                         <Alert

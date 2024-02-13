@@ -1,41 +1,66 @@
-export type Address = {
+interface Address {
     street: string;
-    postal_code: string;
+    postalCode: string;
     city: string;
     country: string;
-};
+}
 
-export type Demographics = {
+interface CommonUserFields {
+    id: string;
+    email: string;
     name: string;
-    birth_date: Date;
-    address: Address;
+    birthDate: Date;
     phone: string;
-};
+    profilePicture: string | null;
+    activeChatId: string[];
+    tags: string[];
+}
 
-export type Statistics = {};
-export type SellerFields = {
-    demographics: Demographics;
-    statistics: Statistics;
-    profile_picture: string;
-    about: string;
-    seller_type: string;
-};
-
-export type ClientFields = {
-    demographics: Demographics;
-    statistics: Statistics;
-    search_history: string[];
+interface CustomerFields {
+    role: 'customer';
+    address: Address;
+    searchHistory: string[];
     favorites: string[];
     cart: string[];
     interests: string[];
-};
+}
 
-export interface User {
-    _id: string;
-    email: string;
-    role: string;
-    client_fields: ClientFields | null;
-    seller_fields: SellerFields | null;
-    active_chat_id: string[];
-    tags: string[];
+interface SellerFields {
+    role: 'seller';
+    about: string;
+    sellerType: string;
+}
+
+type UserRole = CustomerFields | SellerFields;
+
+export type User = CommonUserFields & UserRole;
+
+export type Customer = CommonUserFields & CustomerFields;
+
+export type Seller = CommonUserFields & SellerFields;
+
+export function newCustomer(
+    id: string,
+    email: string,
+    name: string,
+    birthDate: Date,
+    phone: string,
+    address: Address
+): Customer {
+    return {
+        id: id,
+        email: email,
+        name: name,
+        birthDate: birthDate,
+        phone: phone,
+        profilePicture: '',
+        activeChatId: [],
+        tags: [],
+        role: 'customer',
+        address,
+        searchHistory: [],
+        favorites: [],
+        cart: [],
+        interests: [],
+    };
 }

@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import logoApac from '../../assets/LOGO_negrito.png';
-import { Divider, Grid, Link, CircularProgress, useTheme, Box } from '@mui/material';
+import {
+    Box,
+    CircularProgress,
+    Divider,
+    Grid,
+    Link,
+    useTheme,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
+import logoApac from '../../assets/LOGO_negrito.png';
 import { checkLink } from '../../fetchers';
 
 import useProductSearch from '../../hooks/useProductSearch';
 
-export default function Initial(props) {
+export default function Initial(props: { loggedIn: boolean }) {
     const [t] = useTranslation();
     const theme = useTheme();
 
@@ -37,18 +44,17 @@ export default function Initial(props) {
                 className="font-poppins"
                 href={link}
                 underline="none"
-                color={theme.palette.text.primary}
-                >
+                color={theme.palette.text.primary}>
                 {text}
             </Box>
         );
     }
 
-    const [productQuery, setProductQuery] = useState({
+    const [productQuery] = useState({
         featured: true,
         limit: 100,
     });
-    const [productPage, setProductPage] = useState(1);
+    const [productPage] = useState(1);
 
     const { products, loading, error } = useProductSearch(
         productQuery,
@@ -59,10 +65,11 @@ export default function Initial(props) {
     const [randomProduct, setRandomProduct] = useState(null);
 
     useEffect(() => {
-        if (products && products.length > 0)
+        if (products && products.length > 0) {
             setRandomProduct(
                 products[Math.floor(Math.random() * products.length)]
             );
+        }
     }, [products]);
 
     return (
