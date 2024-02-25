@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import Box from '@mui/system/Box';
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { checkLink } from '../../fetchers';

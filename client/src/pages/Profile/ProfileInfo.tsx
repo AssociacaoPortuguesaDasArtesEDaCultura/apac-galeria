@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import Box from '@mui/system/Box';
+import Box from '@mui/material/Box';
 
 import { Alert, Button, Slide, Stack, Typography } from '@mui/material';
 

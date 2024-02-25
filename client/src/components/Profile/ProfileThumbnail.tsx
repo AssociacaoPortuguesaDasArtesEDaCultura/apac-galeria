@@ -1,5 +1,5 @@
 import { Paper, useTheme } from '@mui/material';
-import Box from '@mui/system/Box';
+import Box from '@mui/material/Box';
 
 type ProfileThumbnailProps = {
   title: string;
