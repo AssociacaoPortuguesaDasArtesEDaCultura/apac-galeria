@@ -15,6 +15,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+type ReactNavbarProps = {
+  loggedIn: boolean
+}
+
 const padX = {
     xs: '2rem',
     sm: '4rem',
@@ -22,12 +26,13 @@ const padX = {
     lg: '8rem',
 };
 
-function ReactNavbar(props) {
-    const theme = useTheme();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [open, setOpen] = React.useState(false);
-    const [idx, setIdx] = React.useState(0);
+
+function ReactNavbar(props: ReactNavbarProps) {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [open, setOpen] = React.useState(false);
+  const [idx, setIdx] = React.useState(0);
 
     const { t } = useTranslation();
 
