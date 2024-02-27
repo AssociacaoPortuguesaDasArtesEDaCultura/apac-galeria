@@ -44,12 +44,8 @@ export const getUserInfo = async (): Promise<Customer | Seller> => {
         userSnapshot.data()
     );
 
-    switch (user.role) {
-        case 'customer':
-            return user as Customer;
-        case 'seller':
-            return user as Seller;
-    }
+    if (user.role === 'customer') return user as Customer;
+    if (user.role === 'seller') return user as Seller;
 };
 
 export const getProduct = async (id: string): Promise<Product> => {
