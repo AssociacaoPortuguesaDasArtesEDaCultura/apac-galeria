@@ -4,12 +4,9 @@ import {
     DocumentData,
     FirestoreDataConverter,
     getDoc,
-    getDocs,
     getFirestore,
-    query,
     QueryDocumentSnapshot,
     setDoc,
-    where,
 } from 'firebase/firestore';
 import { app, auth } from './firebase';
 
