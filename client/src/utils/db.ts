@@ -3,12 +3,10 @@ import {
     doc,
     DocumentData,
     FirestoreDataConverter,
-    getDocs,
+    getDoc,
     getFirestore,
-    query,
     QueryDocumentSnapshot,
     setDoc,
-    where,
 } from 'firebase/firestore';
 import { app, auth } from './firebase';
 
@@ -41,16 +39,18 @@ export const db = {
 
 export const getUserInfo = async (): Promise<Customer | Seller> => {
     console.log(auth.currentUser.uid);
-    const q = query(db.users, where('id', '==', auth.currentUser.uid));
-    const querySnapshot = await getDocs(q);
-    const user = querySnapshot.docs[0].data();
+    const id = auth.currentUser.uid;
+    const user = await getDoc(db.user(id)).then((userSnapshot) =>
+        userSnapshot.data()
+    );
 
-    switch (user.role) {
-        case 'customer':
-            return user as Customer;
-        case 'seller':
-            return user as Seller;
-    }
+    if (user.role === 'customer') return user as Customer;
+    if (user.role === 'seller') return user as Seller;
+};
+
+export const getProduct = async (id: string): Promise<Product> => {
+    const productSnapshot = await getDoc(db.product(id));
+    return productSnapshot.data();
 };
 
 export const saveUserInfo = async (user: User): Promise<void> => {
