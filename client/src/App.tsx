@@ -41,7 +41,7 @@ import { getUserInfo } from './utils/db';
 
 const InitialPage = lazy(() => import('./pages/pintar_o_7/Initial'));
 const Gallery = lazy(() => import('./pages/pintar_o_7/Gallery'));
-const ProductPage = lazy(() => import('./pages/Product'));
+const ProductPage = lazy(() => import('./pages/ProductPage'));
 const LoginPage = lazy(() => import('./pages/pintar_o_7/Login'));
 const RegisterPage = lazy(() => import('./pages/pintar_o_7/Register'));
 const ArtistsIndexPage = lazy(() => import('./pages/pintar_o_7/ArtistsIndex'));
@@ -114,7 +114,7 @@ function App() {
         { path: '/artists/add', element: <NewSeller />, requireAuth: false },
         {
             path: '/product/:product_id',
-            element: <ProductPage loggedIn={loggedIn} />,
+            element: <ProductPage loggedIn={loggedIn !== undefined} />,
         },
         { path: '/product', element: <ProductPage /> },
         { path: '/login', element: <LoginPage /> },

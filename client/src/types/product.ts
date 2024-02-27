@@ -1,5 +1,3 @@
-import { DocumentSnapshot } from 'firebase/firestore';
-
 export type Product = {
     id: string;
     seller: string;
