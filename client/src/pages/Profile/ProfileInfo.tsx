@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -14,26 +14,33 @@ import CountrySelect from '../../components/pintar_o_7/CountrySelect';
 import { updateUser } from '../../fetchers';
 import { CountryType, getCountry } from '../../types/country';
 import { NestedPartial } from '../../types/nestedPartial';
-import { User } from '../../types/user';
+import { Customer } from '../../types/user';
 import { getUserInfo } from '../../utils/db';
+import { Spinner } from 'flowbite-react';
 
 const TODAY_MINUS_18_YEARS: Dayjs = dayjs().subtract(18, 'year');
 
-export default async function ProfileInfo() {
+export default function ProfileInfo() {
     const [t] = useTranslation();
     console.log('here');
-    const userInfo = await getUserInfo();
+    const [loadingUser, setLoadingUser] = useState(true);
+    const [editing, setEditing] = useState(true);
+    const [user, setUser] = useState<Customer>();
 
-    console.log('User info:', userInfo);
+    const setUserInfo = async () => {
+        getUserInfo()
+            .then((user) => {
+                if (user.role === 'customer') {
+                    setUser(user);
+                }
+            })
+            .finally(() => setLoadingUser(false));
+    };
 
-    const [name, setName] = useState(() => {
-        if (userInfo) return userInfo.name;
-        else return '';
-    });
-    const [email, setEmail] = useState(() => {
-        if (userInfo) return userInfo.email;
-        else return '';
-    });
+    useEffect(() => {
+        setUserInfo();
+    }, []);
+
     // const [country, setCountry] = useState<CountryType | null | undefined>(
     //   () => {
     //     if (userInfo.role == "customer" && userInfo.address?.country) {
@@ -276,10 +283,12 @@ export default async function ProfileInfo() {
     //   }
     // };
     //
-    return (
+    return loadingUser ? (
+        <Spinner></Spinner>
+    ) : (
         <Box
             // onSubmit={(e) => handleProfileSubmit(e)}
-            component="form"
+            // component="form"
             sx={{
                 paddingY: '2rem',
                 paddingX: {
@@ -312,8 +321,9 @@ export default async function ProfileInfo() {
                         type="text"
                         id="name"
                         autoComplete="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={user.name}
+                        disabled={editing}
+                        // onChange={(e) => setName(e.target.value)}
                     />
                     <TextField
                         variant="standard"
@@ -327,9 +337,9 @@ export default async function ProfileInfo() {
                         type="email"
                         id="email"
                         autoComplete="email"
-                        disabled
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={user.email}
+                        disabled={editing}
+                        // onChange={(e) => setEmail(e.target.value)}
                     />
                     <TextField
                         variant="standard"
@@ -345,7 +355,8 @@ export default async function ProfileInfo() {
                         type="tel"
                         id="phone"
                         autoComplete="tel"
-                        // value={phone}
+                        value={user.phone}
+                        disabled={editing}
                         // onChange={(e) => setPhone(e.target.value)}
                     />
                     <DatePicker
@@ -355,7 +366,7 @@ export default async function ProfileInfo() {
                         format="DD/MM/YYYY"
                         maxDate={TODAY_MINUS_18_YEARS}
                         label={t('forms.birth-date')}
-                        // value={birth_date}
+                        // value={user.birthDate}
                         slotProps={{
                             textField: {
                                 variant: 'standard',
@@ -365,6 +376,7 @@ export default async function ProfileInfo() {
                                 margin: 'normal',
                             },
                         }}
+                        disabled={editing}
                         // onChange={(value) => setBirthDate(value)}
                     />
                 </Paper>
@@ -398,8 +410,9 @@ export default async function ProfileInfo() {
                             //     ? t('errors.profile.city')
                             //     : ' '
                             autoComplete="city"
-                            // value={city}
+                            value={user.address.city}
                             sx={{ maxWidth: { sx: '100%', sm: '40%' } }}
+                            disabled={editing}
                             // onChange={(e) => setCity(e.target.value)}
                         />
                     </Stack>
@@ -421,7 +434,8 @@ export default async function ProfileInfo() {
                             // }
                             id="address"
                             autoComplete="address"
-                            // value={address}
+                            value={user.address.street}
+                            disabled={editing}
                             // onChange={(e) => setAddress(e.target.value)}
                         />
                         <TextField
@@ -437,7 +451,8 @@ export default async function ProfileInfo() {
                             // }
                             id="postalCode"
                             autoComplete="postalCode"
-                            // value={postalCode}
+                            value={user.address.postalCode}
+                            disabled={editing}
                             // onChange={(e) => setPostalCode(e.target.value)}
                         />
                     </Stack>
