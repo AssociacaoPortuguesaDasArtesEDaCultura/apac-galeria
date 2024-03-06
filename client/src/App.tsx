@@ -23,6 +23,7 @@ import ProfileInfo from './pages/Profile/ProfileInfo';
 import ProfileOrderHistory from './pages/Profile/ProfileOrderHistory';
 import NewProduct from './pages/Seller/NewProduct';
 import Products from './pages/Seller/Products';
+import { FirebaseAuthProvider } from './contexts/currentAuthUserContext';
 
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 // import ChatPage from './components/experinecia_chat/ChatPage';
@@ -37,7 +38,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './utils/firebase';
-import { getUserInfo } from './utils/db';
 
 const InitialPage = lazy(() => import('./pages/pintar_o_7/Initial'));
 const Gallery = lazy(() => import('./pages/pintar_o_7/Gallery'));
@@ -151,97 +151,101 @@ function App() {
     ];
 
     return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <PayPalScriptProvider options={payPalOptions}>
-                <ColorModeContext.Provider value={colorMode}>
-                    <ThemeProvider theme={theme}>
-                        <CssBaseline />
-                        <Box
-                            component="div"
-                            className={
-                                theme.palette.mode === 'dark' ? 'dark' : ''
-                            }>
-                            <IconButton
-                                sx={{
-                                    ml: 1,
-                                    position: 'absolute',
-                                    right: 0,
-                                    top: 0,
-                                    zIndex: 1,
-                                }}
-                                onClick={colorMode.toggleColorMode}
-                                color="inherit">
-                                {theme.palette.mode === 'dark' ? (
-                                    <Brightness7Icon />
-                                ) : (
-                                    <Brightness4Icon />
-                                )}
-                            </IconButton>
-                            <Button
-                                sx={{
-                                    position: 'absolute',
-                                    right: 0,
-                                    top: 30,
-                                    zIndex: 1,
-                                }}
-                                onClick={() => changeLanguageHandler()}
-                                color="inherit">
-                                {i18n.language == 'pt' ? 'PT' : 'EN'}
-                            </Button>
-                            {location.pathname !== '/' && (
-                                <ReactNavbar
-                                    loggedIn={loggedIn}
-                                    setHeight={setNavbarSize}
-                                />
-                            )}
-                            <Suspense
-                                fallback={
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            my: 10,
-                                        }}
-                                        component="div">
-                                        <CircularProgress />
-                                    </Box>
+        <FirebaseAuthProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <PayPalScriptProvider options={payPalOptions}>
+                    <ColorModeContext.Provider value={colorMode}>
+                        <ThemeProvider theme={theme}>
+                            <CssBaseline />
+                            <Box
+                                component="div"
+                                className={
+                                    theme.palette.mode === 'dark' ? 'dark' : ''
                                 }>
-                                <Routes>
-                                    {mapRoutes(routes)}
-                                    <Route
-                                        element={
-                                            <PrivateRoutes
-                                                level={loggedIn !== undefined}
-                                            />
-                                        }>
-                                        {mapRoutes(protectedRoutes)}
-                                    </Route>
-                                    <Route
-                                        element={
-                                            <SellerPrivateRoutes
-                                                level={loggedIn}
-                                            />
-                                        }>
-                                        {mapRoutes(sellerRoutes)}
-                                    </Route>
-                                    <Route element={<AdminPrivateRoutes />}>
-                                        {mapRoutes(adminRoutes)}
-                                    </Route>
-                                </Routes>
-                            </Suspense>
-                            {loggedIn && location.pathname !== '/cart' && (
-                                <CartBadge />
-                            )}
-                            {/*checkChatRoute(location.pathname) ? ( <Chat />) : ( <></>)*/}
-                            {location.pathname !== '/' && (
-                                <Footer setHeight={setFooterSize} />
-                            )}
-                        </Box>
-                    </ThemeProvider>
-                </ColorModeContext.Provider>
-            </PayPalScriptProvider>
-        </LocalizationProvider>
+                                <IconButton
+                                    sx={{
+                                        ml: 1,
+                                        position: 'absolute',
+                                        right: 0,
+                                        top: 0,
+                                        zIndex: 1,
+                                    }}
+                                    onClick={colorMode.toggleColorMode}
+                                    color="inherit">
+                                    {theme.palette.mode === 'dark' ? (
+                                        <Brightness7Icon />
+                                    ) : (
+                                        <Brightness4Icon />
+                                    )}
+                                </IconButton>
+                                <Button
+                                    sx={{
+                                        position: 'absolute',
+                                        right: 0,
+                                        top: 30,
+                                        zIndex: 1,
+                                    }}
+                                    onClick={() => changeLanguageHandler()}
+                                    color="inherit">
+                                    {i18n.language == 'pt' ? 'PT' : 'EN'}
+                                </Button>
+                                {location.pathname !== '/' && (
+                                    <ReactNavbar
+                                        loggedIn={loggedIn}
+                                        setHeight={setNavbarSize}
+                                    />
+                                )}
+                                <Suspense
+                                    fallback={
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                my: 10,
+                                            }}
+                                            component="div">
+                                            <CircularProgress />
+                                        </Box>
+                                    }>
+                                    <Routes>
+                                        {mapRoutes(routes)}
+                                        <Route
+                                            element={
+                                                <PrivateRoutes
+                                                    level={
+                                                        loggedIn !== undefined
+                                                    }
+                                                />
+                                            }>
+                                            {mapRoutes(protectedRoutes)}
+                                        </Route>
+                                        <Route
+                                            element={
+                                                <SellerPrivateRoutes
+                                                    level={loggedIn}
+                                                />
+                                            }>
+                                            {mapRoutes(sellerRoutes)}
+                                        </Route>
+                                        <Route element={<AdminPrivateRoutes />}>
+                                            {mapRoutes(adminRoutes)}
+                                        </Route>
+                                    </Routes>
+                                </Suspense>
+                                {loggedIn && location.pathname !== '/cart' && (
+                                    <CartBadge />
+                                )}
+                                {/*checkChatRoute(location.pathname) ? ( <Chat />) : ( <></>)*/}
+                                {location.pathname !== '/' && (
+                                    <Footer setHeight={setFooterSize} />
+                                )}
+                            </Box>
+                        </ThemeProvider>
+                    </ColorModeContext.Provider>
+                </PayPalScriptProvider>
+            </LocalizationProvider>
+        </FirebaseAuthProvider>
     );
 }
 

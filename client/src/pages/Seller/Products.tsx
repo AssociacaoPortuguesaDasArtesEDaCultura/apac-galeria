@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import { Link } from 'react-router-dom';
 import {
@@ -13,33 +13,21 @@ import useProductSearch from '../../hooks/useProductSearch';
 import ProductPaper from '../../components/Seller/ProductPaper';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
-import { CurrentAccountContext } from '../../contexts/currentAccountContext';
-import { decodeToken } from 'react-jwt';
+import { ProductQuery } from '../../types/query';
+import { FirebaseAuthContext } from '../../contexts/currentAuthUserContext';
 
 export default function Products() {
     const { t } = useTranslation();
-    const { tokenLevel } = useContext(CurrentAccountContext);
-    const [productQuery, setProductQuery] = React.useState({});
-    const [productPage, setProductPage] = React.useState(1);
-    const { hasMore, loading, error, products } = useProductSearch(
-        productQuery,
-        productPage
-    );
 
-    useEffect(() => {
-        if (tokenLevel === 'seller') {
-            const token = localStorage.getItem('token');
-            if (!token) return;
-            const decodedToken = decodeToken(token);
-            if (!decodedToken) return;
-            const sellerId = decodedToken._id;
-            if (!sellerId) return;
-            setProductQuery({
-                expand: '_seller',
-                _seller: sellerId,
-            });
-        }
-    }, [tokenLevel]);
+    const { user } = useContext(FirebaseAuthContext);
+    const [productQuery, setProductQuery] = useState<ProductQuery>({
+        available: true,
+        seller: user.id,
+    });
+
+    const { hasMore, loading, error, products, loadMore } =
+        useProductSearch(productQuery);
+    console.log(products);
 
     return (
         <Box
@@ -69,17 +57,14 @@ export default function Products() {
                     {t('artist.new-piece')}
                 </Button>
                 {products &&
-                    products.map(
-                        (product, index) =>
-                            product._seller instanceof Object && (
-                                <Link
-                                    key={index}
-                                    to={`/product/${product._id}`}
-                                    state={product}>
-                                    <ProductPaper product={product} />
-                                </Link>
-                            )
-                    )}
+                    products.map((product, index) => (
+                        <Link
+                            key={index}
+                            to={`/product/${product.id}`}
+                            state={product}>
+                            <ProductPaper product={product} />
+                        </Link>
+                    ))}
                 {error && <div>{t('errors.title')}</div>}
                 {loading && (
                     <Box
@@ -98,9 +83,7 @@ export default function Products() {
                         startIcon={<AddCircleOutlineSharpIcon />}
                         variant="outlined"
                         onClick={() => {
-                            setProductPage(
-                                (prevPageNumber) => prevPageNumber + 1
-                            );
+                            loadMore();
                         }}>
                         {t('global.load-more')}
                     </Button>

@@ -37,13 +37,13 @@ export const db = {
     product: (id: string) => docGeneric<Product>(`products/${id}`),
 };
 
-export const getUserInfo = async (): Promise<Customer | Seller> => {
-    console.log(auth.currentUser.uid);
-    const id = auth.currentUser.uid;
+export const getUserInfo = async (id: string): Promise<Customer | Seller> => {
+    console.log('Searching for ', id);
     const user = await getDoc(db.user(id)).then((userSnapshot) =>
         userSnapshot.data()
     );
-
+    console.log('Found user ', user);
+    if (user === undefined) return undefined;
     if (user.role === 'customer') return user as Customer;
     if (user.role === 'seller') return user as Seller;
 };

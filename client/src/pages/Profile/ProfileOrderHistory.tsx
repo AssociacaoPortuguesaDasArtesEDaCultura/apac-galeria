@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { getOrders } from '../../fetchers';
 import { decodeToken } from 'react-jwt';
-import { CurrentAccountContext } from '../../contexts/currentAccountContext';
 
 const createRandomOrder = (): OrderType => {
     const _id = Math.floor(Math.random() * 1000).toString();
@@ -61,7 +60,7 @@ const createRandomOrders = (): OrderType[] => {
 export default function ProfileOrderHistory() {
     const [orders, setOrders] = useState<OrderType[]>([]);
 
-    const { _id } = useContext(CurrentAccountContext);
+    const { _id } = ''; //useContext(CurrentAccountContext);
     useEffect(() => {
         //const MOCK_ORDERS = createRandomOrders();
         //setOrders(MOCK_ORDERS);

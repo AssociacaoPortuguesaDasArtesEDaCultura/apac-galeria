@@ -16,6 +16,7 @@ import CountrySelect from '../../components/pintar_o_7/CountrySelect';
 import { newCustomer } from '../../types/user';
 import { saveUserInfo } from '../../utils/db';
 import { auth } from '../../utils/firebase';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [t] = useTranslation();

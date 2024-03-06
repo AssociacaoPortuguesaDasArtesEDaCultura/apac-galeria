@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useContext, useState } from 'react';
 
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -11,12 +11,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import CountrySelect from '../../components/pintar_o_7/CountrySelect';
-import { updateUser } from '../../fetchers';
 import { CountryType, getCountry } from '../../types/country';
 import { NestedPartial } from '../../types/nestedPartial';
-import { Customer } from '../../types/user';
-import { getUserInfo } from '../../utils/db';
 import { Spinner } from 'flowbite-react';
+import { FirebaseAuthContext } from '../../contexts/currentAuthUserContext';
 
 const TODAY_MINUS_18_YEARS: Dayjs = dayjs().subtract(18, 'year');
 
@@ -24,22 +22,8 @@ export default function ProfileInfo() {
     const [t] = useTranslation();
     console.log('here');
     const [loadingUser, setLoadingUser] = useState(true);
-    const [editing, setEditing] = useState(true);
-    const [user, setUser] = useState<Customer>();
-
-    const setUserInfo = async () => {
-        getUserInfo()
-            .then((user) => {
-                if (user.role === 'customer') {
-                    setUser(user);
-                }
-            })
-            .finally(() => setLoadingUser(false));
-    };
-
-    useEffect(() => {
-        setUserInfo();
-    }, []);
+    const [editing, setEditing] = useState(false);
+    const { user } = useContext(FirebaseAuthContext);
 
     // const [country, setCountry] = useState<CountryType | null | undefined>(
     //   () => {
