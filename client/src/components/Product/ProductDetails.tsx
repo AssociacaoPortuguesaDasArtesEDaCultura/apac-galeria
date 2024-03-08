@@ -31,7 +31,6 @@ import {
     getShipmentByProduct,
     updateShipment,
 } from '../../fetchers';
-import { CurrentAccountContext } from '../../contexts/currentAccountContext';
 import { Result } from '../../types/result';
 import { ShipmentType } from '../../types/order';
 
@@ -39,7 +38,7 @@ const ProductDetails = (data: { product: ProductType; loggedIn: boolean }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { product, loggedIn } = data;
-    const { tokenLevel } = useContext(CurrentAccountContext);
+    const tokenLevel = '';
     const theme = useTheme();
 
     const { cart, REDUCER_ACTIONS, dispatch } = useCart();

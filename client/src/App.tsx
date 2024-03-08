@@ -76,7 +76,7 @@ function App() {
     //     return re.test(route);
     // };
 
-    const [loggedIn, loading, error] = useAuthState(auth);
+    const [loggedIn] = useAuthState(auth);
     console.log(' Logged in as ', loggedIn);
 
     const colorMode = useMemo(
@@ -116,7 +116,10 @@ function App() {
             path: '/product/:product_id',
             element: <ProductPage loggedIn={loggedIn !== undefined} />,
         },
-        { path: '/product', element: <ProductPage /> },
+        {
+            path: '/product',
+            element: <ProductPage loggedIn={loggedIn !== undefined} />,
+        },
         { path: '/login', element: <LoginPage /> },
         { path: '/register', element: <RegisterPage /> },
         { path: '/info', element: <InfoPage /> },
