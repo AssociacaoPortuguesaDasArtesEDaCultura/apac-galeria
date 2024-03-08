@@ -9,13 +9,11 @@ import AddCircleOutlineSharpIcon from '@mui/icons-material/AddCircleOutlineSharp
 import useArtistSearch from '../../hooks/useArtistSearch';
 import ArtistThumbnail from '../../components/pintar_o_7/ArtistThumbnail';
 import { useTranslation } from 'react-i18next';
-import { CurrentAccountContext } from '../../contexts/currentAccountContext';
 import { TextField } from '@mui/material';
 import { SellerQuery } from '../../types/query';
 
 export default function ArtistsIndexPage() {
     const [t] = useTranslation();
-    const { tokenLevel } = useContext(CurrentAccountContext);
     const [artistPage, setArtistPage] = useState(1);
     const [artistFilter, setArtistFilter] = useState('');
     const [artistQuery, setArtistQuery] = useState<SellerQuery>(() => ({

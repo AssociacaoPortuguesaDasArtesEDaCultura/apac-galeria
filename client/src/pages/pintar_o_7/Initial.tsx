@@ -54,12 +54,8 @@ export default function Initial(props: { loggedIn: boolean }) {
         featured: true,
         limit: 100,
     });
-    const [productPage] = useState(1);
 
-    const { products, loading, error } = useProductSearch(
-        productQuery,
-        productPage
-    );
+    const { products, loading, error } = useProductSearch(productQuery);
 
     // get one random product
     const [randomProduct, setRandomProduct] = useState(null);
