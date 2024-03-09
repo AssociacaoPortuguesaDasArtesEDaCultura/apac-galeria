@@ -20,7 +20,7 @@ export default function ArtistPage() {
     const artist: Seller = location.state;
 
     const [productQuery] = useState<ProductQuery>({
-        available: true,
+        status: 'available',
         seller: artist.id,
     });
 

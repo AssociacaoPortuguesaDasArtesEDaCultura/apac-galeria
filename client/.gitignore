@@ -25,3 +25,6 @@ dist-ssr
 
 # Big files 
 public/afgietsel_van_de_buste_van_nefertiti.glb
+
+.firebase/*
+
