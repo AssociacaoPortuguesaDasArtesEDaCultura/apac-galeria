@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useMemo } from 'react';
+import { lazy, Suspense, useState, useMemo, useContext } from 'react';
 
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
@@ -23,7 +23,10 @@ import ProfileInfo from './pages/Profile/ProfileInfo';
 import ProfileOrderHistory from './pages/Profile/ProfileOrderHistory';
 import NewProduct from './pages/Seller/NewProduct';
 import Products from './pages/Seller/Products';
-import { FirebaseAuthProvider } from './contexts/currentAuthUserContext';
+import {
+    FirebaseAuthContext,
+    FirebaseAuthProvider,
+} from './contexts/currentAuthUserContext';
 
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 // import ChatPage from './components/experinecia_chat/ChatPage';
@@ -35,9 +38,6 @@ import { getDesignTokens } from './theme';
 import { ColorModeContext } from './theme';
 
 import { useTranslation } from 'react-i18next';
-
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from './utils/firebase';
 
 const InitialPage = lazy(() => import('./pages/pintar_o_7/Initial'));
 const Gallery = lazy(() => import('./pages/pintar_o_7/Gallery'));
@@ -75,9 +75,7 @@ function App() {
     //     var re = /\/product\/[^\/?]+/;
     //     return re.test(route);
     // };
-
-    const [loggedIn] = useAuthState(auth);
-    console.log(' Logged in as ', loggedIn);
+    const { user, loggedIn } = useContext(FirebaseAuthContext);
 
     const colorMode = useMemo(
         () => ({
@@ -98,7 +96,7 @@ function App() {
         intent: 'capture',
     };
 
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
     const changeLanguageHandler = () =>
         i18n.changeLanguage(i18n.language === 'pt' ? 'en' : 'pt');
 
@@ -216,9 +214,7 @@ function App() {
                                         <Route
                                             element={
                                                 <PrivateRoutes
-                                                    level={
-                                                        loggedIn !== undefined
-                                                    }
+                                                    loggedIn={loggedIn}
                                                 />
                                             }>
                                             {mapRoutes(protectedRoutes)}
@@ -226,7 +222,9 @@ function App() {
                                         <Route
                                             element={
                                                 <SellerPrivateRoutes
-                                                    level={loggedIn}
+                                                    isSeller={
+                                                        user.role === 'seller'
+                                                    }
                                                 />
                                             }>
                                             {mapRoutes(sellerRoutes)}
