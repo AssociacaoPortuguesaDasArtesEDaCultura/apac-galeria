@@ -18,8 +18,12 @@ export const searchProducts = async (
     productQuery: ProductQuery
 ): Promise<[Product[], DocumentSnapshot]> => {
     const filters: QueryConstraint[] = [];
-    if (productQuery.available) {
-        filters.push(where('available', '==', true));
+    if (productQuery.status) {
+        if (Array.isArray(productQuery.status)) {
+            filters.push(where('status', 'in', productQuery.status));
+        } else {
+            filters.push(where('status', '==', productQuery.status));
+        }
     }
     if (productQuery.featured) {
         filters.push(where('featured', '==', true));

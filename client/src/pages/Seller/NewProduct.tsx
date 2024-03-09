@@ -21,14 +21,19 @@ import Grid from '@mui/material/Unstable_Grid2';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import { NumericFormat, NumericFormatProps } from 'react-number-format';
-import { useRef, useState } from 'react';
+import {
+    useRef,
+    useState,
+    ChangeEvent,
+    FormEvent,
+    useContext,
+    forwardRef,
+} from 'react';
 import { useTranslation } from 'react-i18next';
-import React from 'react';
-import { ProductType } from '../../types/product';
-import { NestedPartial } from '../../types/nestedPartial';
-import { addProduct, uploadProductPhotos } from '../../fetchers';
-import { Result } from '../../types/result';
+import { PartialProduct } from '../../types/product';
 import { useNavigate } from 'react-router-dom';
+import { uploadProductWithPictures } from '../../utils/db';
+import { FirebaseAuthContext } from '../../contexts/currentAuthUserContext';
 
 const availableTypes: string[] = [
     'Pintura',
@@ -48,7 +53,7 @@ type CustomProps = {
     name: string;
 };
 
-const PriceInput = React.forwardRef<NumericFormatProps, CustomProps>(
+const PriceInput = forwardRef<NumericFormatProps, CustomProps>(
     function NumericFormatCustom(props, ref) {
         const { onChange, ...other } = props;
 
@@ -78,7 +83,7 @@ const PriceInput = React.forwardRef<NumericFormatProps, CustomProps>(
     }
 );
 
-const DimensionInput = React.forwardRef<NumericFormatProps, CustomProps>(
+const DimensionInput = forwardRef<NumericFormatProps, CustomProps>(
     function NumericFormatCustom(props, ref) {
         const { onChange, ...other } = props;
 
@@ -106,8 +111,9 @@ const DimensionInput = React.forwardRef<NumericFormatProps, CustomProps>(
 
 const MAX_IMAGES = 12;
 
-export default function NewProduct() {
+const NewProduct = () => {
     const { t } = useTranslation();
+    const { user } = useContext(FirebaseAuthContext);
     const navigate = useNavigate();
     const theme = useTheme();
     const inputRef = useRef<HTMLInputElement>(null);
@@ -118,7 +124,7 @@ export default function NewProduct() {
     const [technique, setTechnique] = useState<string>('');
     const [materials, setMaterials] = useState<string[]>([]);
     const [materialsInput, setMaterialsInput] = useState<string>('');
-    const [maskedValues, setMaskedValues] = React.useState({
+    const [maskedValues, setMaskedValues] = useState({
         price: '',
         width: '',
         height: '',
@@ -131,15 +137,16 @@ export default function NewProduct() {
 
     const imageUrls = images.map((file) => URL.createObjectURL(file));
 
-    const onAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (user.role !== 'seller') {
+        return;
+    }
+
+    const onAddImage = (e: ChangeEvent<HTMLInputElement>) => {
         const fileList = e.target.files;
         console.log(fileList);
         if (fileList) {
-            let files = [...images, ...fileList];
-            if (files.length > MAX_IMAGES) {
-                files = files.slice(0, MAX_IMAGES);
-            }
-            setImages(files);
+            const files = [...images, ...fileList];
+            setImages(files.slice(0, MAX_IMAGES));
         }
     };
 
@@ -153,16 +160,14 @@ export default function NewProduct() {
         inputRef.current.click();
     };
 
-    const handleMaskedValuesChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleMaskedValuesChange = (event: ChangeEvent<HTMLInputElement>) => {
         setMaskedValues({
             ...maskedValues,
             [event.target.name]: event.target.value,
         });
     };
 
-    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setMaterialsInput('');
         if (images.length === 0) {
@@ -173,7 +178,7 @@ export default function NewProduct() {
             return;
         }
 
-        const product: NestedPartial<ProductType> = {
+        const product: PartialProduct = {
             title: title,
             description: description,
             price: parseFloat(maskedValues.price),
@@ -187,35 +192,34 @@ export default function NewProduct() {
                     depth: parseFloat(maskedValues.depth),
                     weight: parseFloat(maskedValues.weight),
                 },
+                year: 2024,
+                state: 'STATE',
             },
             author: author,
         };
 
-        const token = localStorage.getItem('token');
-        if (token == null) return;
-
-        const addProductResponse: Result<object, Error> = await addProduct(
-            product,
-            token
-        );
-        if (addProductResponse.isOk()) {
-            const productId = addProductResponse.value._id;
-            uploadPhotos(productId, token);
-        } else {
-            console.log(addProductResponse.error);
+        try {
+            const savedProductId = await uploadProductWithPictures(
+                user,
+                product,
+                images
+            );
+            navigate(`/product/${savedProductId}`);
+        } catch (error) {
+            console.log(error);
+            return;
         }
-    };
 
-    const uploadPhotos = async (productId: string, token: string) => {
-        if (!inputRef.current?.files) return;
-        if (images.length === 0) return;
-
-        const uploadPhotosRes = await uploadProductPhotos(
-            token,
-            productId,
-            inputRef.current.files
-        );
-        navigate(`/product/${productId}`);
+        // const uploadPhotos = async (productId: string, token: string) => {
+        //   if (!inputRef.current?.files) return;
+        //   if (images.length === 0) return;
+        //
+        //   const uploadPhotosRes = await uploadProductPhotos(
+        //     token,
+        //     productId,
+        //     inputRef.current.files
+        //   );
+        // };
     };
 
     return (
@@ -600,4 +604,6 @@ export default function NewProduct() {
             </Slide>
         </>
     );
-}
+};
+
+export default NewProduct;

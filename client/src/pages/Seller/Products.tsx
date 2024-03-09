@@ -20,8 +20,7 @@ export default function Products() {
     const { t } = useTranslation();
 
     const { user } = useContext(FirebaseAuthContext);
-    const [productQuery, setProductQuery] = useState<ProductQuery>({
-        available: true,
+    const [productQuery] = useState<ProductQuery>({
         seller: user.id,
     });
 

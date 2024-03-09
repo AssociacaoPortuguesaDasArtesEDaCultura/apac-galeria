@@ -32,8 +32,8 @@ const ProductPage = (props: { loggedIn: boolean }) => {
     }, [product_id, product]);
 
     const { products, loading } = useProductSearch({
-        // seller: product.seller,
-        available: true,
+        seller: product.seller,
+        // status: 'available',
         limit: 3,
     });
 

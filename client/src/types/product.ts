@@ -1,27 +1,28 @@
+export type Status = 'available' | 'pending' | 'unavailable';
 export type Product = {
     id: string;
     seller: string;
     title: string;
     author: string;
+    storageRefs: string[];
     photos: string[];
     description: string;
     price: number;
     product_type: string;
-    piece_info: PieceInfo | null;
-    // book_info: BookInfo | null;
+    piece_info: PieceInfo;
     published_date: Date;
-    //rating: number,     // [0-5]
-    //reviews: Review[],
-    available: boolean;
+    status: Status;
     featured: boolean;
 };
 
-/*type Review = {
-    id: number,
-    user: string,
-    rating: number,
-    comment: string,
-}*/
+export type PartialProduct = {
+    title: string;
+    author: string;
+    description: string;
+    price: number;
+    product_type: string;
+    piece_info: PieceInfo;
+};
 
 export type PieceInfo = {
     technique: string;
@@ -31,14 +32,7 @@ export type PieceInfo = {
     state: string;
 };
 
-// type BookInfo = {
-//     publisher: string;
-//     genre: string;
-//     stock: number;
-//     isbn: string; // International Standard Book Number
-// };
-
-type Dimensions = {
+export type Dimensions = {
     height: number;
     width: number;
     depth: number;

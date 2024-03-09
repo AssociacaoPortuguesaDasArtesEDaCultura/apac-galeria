@@ -1,7 +1,8 @@
 import { DocumentSnapshot } from 'firebase/firestore';
+import { Status } from './product';
 
 export type ProductQuery = {
-    available?: boolean;
+    status?: Status | Status[];
     seller?: string;
     limit?: number;
     featured?: boolean;
