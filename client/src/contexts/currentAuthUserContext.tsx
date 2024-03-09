@@ -13,12 +13,16 @@ import { User } from '../types/user';
 type AuthValues = {
     user: User | undefined;
     setUser: Dispatch<SetStateAction<User>>;
+    loggedIn: boolean;
 };
 const FirebaseAuthContext = createContext<AuthValues>(undefined);
 
 const FirebaseAuthProvider = ({ children }) => {
     const [user, setUser] = useState<User>();
     const [loading, setLoading] = useState<boolean>(false);
+    const [loggedIn, setLoggedIn] = useState<boolean>(user !== undefined);
+
+    useEffect(() => setLoggedIn(user !== undefined), [user]);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(
@@ -43,6 +47,7 @@ const FirebaseAuthProvider = ({ children }) => {
     const values = {
         user: user,
         setUser: setUser,
+        loggedIn: loggedIn,
     };
 
     return (
