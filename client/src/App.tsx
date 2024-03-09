@@ -89,7 +89,7 @@ function App() {
     const routes = [
         {
             path: '/',
-            element: <InitialPage loggedIn={loggedIn !== undefined} />,
+            element: <InitialPage loggedIn={loggedIn} />,
         },
         { path: '/gallery', element: <Gallery /> },
         { path: '/artists', element: <ArtistsIndexPage /> },
