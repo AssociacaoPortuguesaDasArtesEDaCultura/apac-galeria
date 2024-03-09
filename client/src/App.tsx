@@ -1,7 +1,5 @@
 import { lazy, Suspense, useState, useMemo } from 'react';
 
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 import {
     Box,
     Button,
@@ -38,6 +36,8 @@ import { useTranslation } from 'react-i18next';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './utils/firebase';
+import ThemeSwitcher from './components/ThemeSwitcher';
+import LanguageSwitcher from './components/LanguageSwitcher';
 
 const InitialPage = lazy(() => import('./pages/pintar_o_7/Initial'));
 const Gallery = lazy(() => import('./pages/pintar_o_7/Gallery'));
@@ -97,10 +97,6 @@ function App() {
         currency: 'EUR',
         intent: 'capture',
     };
-
-    const { t, i18n } = useTranslation();
-    const changeLanguageHandler = () =>
-        i18n.changeLanguage(i18n.language === 'pt' ? 'en' : 'pt');
 
     // All routes for the app
     const routes = [
@@ -165,33 +161,11 @@ function App() {
                                 className={
                                     theme.palette.mode === 'dark' ? 'dark' : ''
                                 }>
-                                <IconButton
-                                    sx={{
-                                        ml: 1,
-                                        position: 'absolute',
-                                        right: 0,
-                                        top: 0,
-                                        zIndex: 1,
-                                    }}
-                                    onClick={colorMode.toggleColorMode}
-                                    color="inherit">
-                                    {theme.palette.mode === 'dark' ? (
-                                        <Brightness7Icon />
-                                    ) : (
-                                        <Brightness4Icon />
-                                    )}
-                                </IconButton>
-                                <Button
-                                    sx={{
-                                        position: 'absolute',
-                                        right: 0,
-                                        top: 30,
-                                        zIndex: 1,
-                                    }}
-                                    onClick={() => changeLanguageHandler()}
-                                    color="inherit">
-                                    {i18n.language == 'pt' ? 'PT' : 'EN'}
-                                </Button>
+                                <ThemeSwitcher
+                                    toggleColorMode={colorMode.toggleColorMode}
+                                    theme={theme}
+                                />
+                                <LanguageSwitcher />
                                 {location.pathname !== '/' && (
                                     <ReactNavbar
                                         loggedIn={loggedIn}

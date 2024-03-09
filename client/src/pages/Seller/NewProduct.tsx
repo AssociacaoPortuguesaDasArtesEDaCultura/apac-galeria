@@ -43,10 +43,10 @@ const availableTypes: string[] = [
     'Arte Têxtil',
 ];
 
-interface CustomProps {
+type CustomProps = {
     onChange: (event: { target: { name: string; value: string } }) => void;
     name: string;
-}
+};
 
 const PriceInput = React.forwardRef<NumericFormatProps, CustomProps>(
     function NumericFormatCustom(props, ref) {
