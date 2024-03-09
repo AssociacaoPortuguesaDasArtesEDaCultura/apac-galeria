@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
-import logoApac from '../../assets/LOGO_negrito.png';
+import logoDark from '../../assets/LOGO_negrito.png';
 import { checkLink } from '../../fetchers';
 
 import useProductSearch from '../../hooks/useProductSearch';
@@ -71,7 +71,7 @@ export default function Initial(props: { loggedIn: boolean }) {
     return (
         <Box component="div">
             <img
-                src={logoApac}
+                src={logoDark}
                 className="mr-3 h-28"
                 alt="Logo"
                 style={{ position: 'absolute', top: 60, left: 60 }}
