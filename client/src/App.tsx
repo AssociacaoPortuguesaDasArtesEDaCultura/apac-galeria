@@ -35,16 +35,9 @@ import SellerPrivateRoutes from './routes/SellerPrivateRoutes';
 import { getDesignTokens } from './theme';
 import { ColorModeContext } from './theme';
 
-import { useTranslation } from 'react-i18next';
-
-<<<<<<< HEAD
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from './utils/firebase';
 import ThemeSwitcher from './components/ThemeSwitcher';
 import LanguageSwitcher from './components/LanguageSwitcher';
 
-=======
->>>>>>> f71399b6060de80e83417dee5b24f6d5a39c292a
 const InitialPage = lazy(() => import('./pages/pintar_o_7/Initial'));
 const Gallery = lazy(() => import('./pages/pintar_o_7/Gallery'));
 const ProductPage = lazy(() => import('./pages/ProductPage'));
