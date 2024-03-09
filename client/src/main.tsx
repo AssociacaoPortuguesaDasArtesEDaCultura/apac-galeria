@@ -13,6 +13,7 @@ import { ViewportProvider } from './contexts/viewPortContext';
 import { BrowserRouter } from 'react-router-dom';
 import { CartProvider } from './contexts/cartProvider.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
+import { FirebaseAuthProvider } from './contexts/currentAuthUserContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
@@ -21,7 +22,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <ViewportProvider>
                 <BrowserRouter>
                     <CartProvider>
-                        <App />
+                        <FirebaseAuthProvider>
+                            <App />
+                        </FirebaseAuthProvider>
                     </CartProvider>
                 </BrowserRouter>
             </ViewportProvider>

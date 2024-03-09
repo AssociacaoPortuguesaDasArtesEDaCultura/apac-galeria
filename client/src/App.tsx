@@ -1,15 +1,6 @@
 import { lazy, Suspense, useState, useMemo, useContext } from 'react';
 
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import {
-    Box,
-    Button,
-    CircularProgress,
-    IconButton,
-    PaletteMode,
-    Popover,
-} from '@mui/material';
+import { Box, CircularProgress, PaletteMode } from '@mui/material';
 import { CssBaseline } from '@mui/material/';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -23,10 +14,7 @@ import ProfileInfo from './pages/Profile/ProfileInfo';
 import ProfileOrderHistory from './pages/Profile/ProfileOrderHistory';
 import NewProduct from './pages/Seller/NewProduct';
 import Products from './pages/Seller/Products';
-import {
-    FirebaseAuthContext,
-    FirebaseAuthProvider,
-} from './contexts/currentAuthUserContext';
+import { FirebaseAuthContext } from './contexts/currentAuthUserContext';
 
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 // import ChatPage from './components/experinecia_chat/ChatPage';
@@ -37,7 +25,8 @@ import SellerPrivateRoutes from './routes/SellerPrivateRoutes';
 import { getDesignTokens } from './theme';
 import { ColorModeContext } from './theme';
 
-import { useTranslation } from 'react-i18next';
+import ThemeSwitcher from './components/ThemeSwitcher';
+import LanguageSwitcher from './components/LanguageSwitcher';
 
 const InitialPage = lazy(() => import('./pages/pintar_o_7/Initial'));
 const Gallery = lazy(() => import('./pages/pintar_o_7/Gallery'));
@@ -67,8 +56,8 @@ const mapRoutes = (routes: RouteType[]) =>
     ));
 function App() {
     const [mode, setMode] = useState<PaletteMode>('light');
-    const [, setNavbarSize] = useState<number>(0);
-    const [, setFooterSize] = useState<number>(0);
+    // const [, setNavbarSize] = useState<number>(0);
+    // const [, setFooterSize] = useState<number>(0);
     const location = useLocation();
 
     // const checkChatRoute = (route: string) => {
@@ -95,10 +84,6 @@ function App() {
         currency: 'EUR',
         intent: 'capture',
     };
-
-    const { i18n } = useTranslation();
-    const changeLanguageHandler = () =>
-        i18n.changeLanguage(i18n.language === 'pt' ? 'en' : 'pt');
 
     // All routes for the app
     const routes = [
@@ -152,101 +137,73 @@ function App() {
     ];
 
     return (
-        <FirebaseAuthProvider>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <PayPalScriptProvider options={payPalOptions}>
-                    <ColorModeContext.Provider value={colorMode}>
-                        <ThemeProvider theme={theme}>
-                            <CssBaseline />
-                            <Box
-                                component="div"
-                                className={
-                                    theme.palette.mode === 'dark' ? 'dark' : ''
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <PayPalScriptProvider options={payPalOptions}>
+                <ColorModeContext.Provider value={colorMode}>
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        <Box
+                            component="div"
+                            className={
+                                theme.palette.mode === 'dark' ? 'dark' : ''
+                            }>
+                            <ThemeSwitcher
+                                toggleColorMode={colorMode.toggleColorMode}
+                                theme={theme}
+                            />
+                            <LanguageSwitcher />
+                            {location.pathname !== '/' && (
+                                <ReactNavbar loggedIn={loggedIn} />
+                            )}
+                            <Suspense
+                                fallback={
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            my: 10,
+                                        }}
+                                        component="div">
+                                        <CircularProgress />
+                                    </Box>
                                 }>
-                                <IconButton
-                                    sx={{
-                                        ml: 1,
-                                        position: 'absolute',
-                                        right: 0,
-                                        top: 0,
-                                        zIndex: 1,
-                                    }}
-                                    onClick={colorMode.toggleColorMode}
-                                    color="inherit">
-                                    {theme.palette.mode === 'dark' ? (
-                                        <Brightness7Icon />
-                                    ) : (
-                                        <Brightness4Icon />
-                                    )}
-                                </IconButton>
-                                <Button
-                                    sx={{
-                                        position: 'absolute',
-                                        right: 0,
-                                        top: 30,
-                                        zIndex: 1,
-                                    }}
-                                    onClick={() => changeLanguageHandler()}
-                                    color="inherit">
-                                    {i18n.language == 'pt' ? 'PT' : 'EN'}
-                                </Button>
-                                {location.pathname !== '/' && (
-                                    <ReactNavbar
-                                        loggedIn={loggedIn}
-                                        setHeight={setNavbarSize}
-                                    />
-                                )}
-                                <Suspense
-                                    fallback={
-                                        <Box
-                                            sx={{
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                my: 10,
-                                            }}
-                                            component="div">
-                                            <CircularProgress />
-                                        </Box>
-                                    }>
-                                    <Routes>
-                                        {mapRoutes(routes)}
-                                        <Route
-                                            element={
-                                                <PrivateRoutes
-                                                    loggedIn={loggedIn}
-                                                />
-                                            }>
-                                            {mapRoutes(protectedRoutes)}
-                                        </Route>
-                                        <Route
-                                            element={
-                                                <SellerPrivateRoutes
-                                                    isSeller={
-                                                        user.role === 'seller'
-                                                    }
-                                                />
-                                            }>
-                                            {mapRoutes(sellerRoutes)}
-                                        </Route>
-                                        <Route element={<AdminPrivateRoutes />}>
-                                            {mapRoutes(adminRoutes)}
-                                        </Route>
-                                    </Routes>
-                                </Suspense>
-                                {loggedIn && location.pathname !== '/cart' && (
-                                    <CartBadge />
-                                )}
-                                {/*checkChatRoute(location.pathname) ? ( <Chat />) : ( <></>)*/}
-                                {location.pathname !== '/' && (
-                                    <Footer setHeight={setFooterSize} />
-                                )}
-                            </Box>
-                        </ThemeProvider>
-                    </ColorModeContext.Provider>
-                </PayPalScriptProvider>
-            </LocalizationProvider>
-        </FirebaseAuthProvider>
+                                <Routes>
+                                    {mapRoutes(routes)}
+                                    <Route
+                                        element={
+                                            <PrivateRoutes
+                                                loggedIn={loggedIn}
+                                            />
+                                        }>
+                                        {mapRoutes(protectedRoutes)}
+                                    </Route>
+                                    <Route
+                                        element={
+                                            <SellerPrivateRoutes
+                                                isSeller={
+                                                    user &&
+                                                    user.role === 'seller'
+                                                }
+                                            />
+                                        }>
+                                        {mapRoutes(sellerRoutes)}
+                                    </Route>
+                                    <Route element={<AdminPrivateRoutes />}>
+                                        {mapRoutes(adminRoutes)}
+                                    </Route>
+                                </Routes>
+                            </Suspense>
+                            {loggedIn && location.pathname !== '/cart' && (
+                                <CartBadge />
+                            )}
+                            {/*checkChatRoute(location.pathname) ? ( <Chat />) : ( <></>)*/}
+                            {location.pathname !== '/' && <Footer />}
+                        </Box>
+                    </ThemeProvider>
+                </ColorModeContext.Provider>
+            </PayPalScriptProvider>
+        </LocalizationProvider>
     );
 }
 

@@ -9,11 +9,12 @@ import {
 import * as React from 'react';
 
 import MenuIcon from '@mui/icons-material/Menu';
-import logoApac from '../../assets/LOGO_negrito.png';
+import logoDark from '../../assets/LOGO_negrito.png';
+import logoLight from '../../assets/LOGO.png';
 
 import { useTranslation } from 'react-i18next';
 
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 type ReactNavbarProps = {
     loggedIn: boolean;
@@ -28,10 +29,8 @@ const padX = {
 
 function ReactNavbar(props: ReactNavbarProps) {
     const theme = useTheme();
-    const navigate = useNavigate();
     const location = useLocation();
     const [open, setOpen] = React.useState(false);
-    const [idx, setIdx] = React.useState(0);
 
     const { t } = useTranslation();
 
@@ -62,7 +61,7 @@ function ReactNavbar(props: ReactNavbarProps) {
                     <Box
                         component="img"
                         sx={{
-                            content: `url(${logoApac})`,
+                            content: `url(${theme.palette.mode === 'dark' ? logoLight : logoDark})`,
                             height: { xs: 60, md: 120 },
                         }}
                     />
