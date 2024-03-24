@@ -5,6 +5,7 @@ import {
     GoogleAuthProvider,
     createUserWithEmailAndPassword,
     getAuth,
+    signOut,
 } from 'firebase/auth';
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -28,4 +29,10 @@ export const googleProvider = new GoogleAuthProvider();
 
 export const registerWithEmailAndPassword = async (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
+};
+
+export const logOut = () => {
+    signOut(auth)
+        .then(() => console.log('Signed out'))
+        .catch((error) => console.log('Error logging out ', error));
 };

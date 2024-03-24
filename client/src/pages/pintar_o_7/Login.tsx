@@ -51,13 +51,14 @@ const Login = () => {
         }
 
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
+            .then(() => {
                 navigate('/gallery');
             })
             .catch((error) => {
                 if (
                     error.code === 'auth/user-not-found' ||
-                    error.code === 'auth/wrong-password'
+                    error.code === 'auth/wrong-password' ||
+                    error.code === 'auth/invalid-credential'
                 ) {
                     setShowCredAlert(true);
                 } else {
