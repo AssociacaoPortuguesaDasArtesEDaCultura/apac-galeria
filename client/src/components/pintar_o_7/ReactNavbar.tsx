@@ -1,15 +1,16 @@
 import {
     AppBar,
     Box,
-    Grid,
     IconButton,
     Toolbar,
+    Typography,
     useTheme,
 } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
 
 import MenuIcon from '@mui/icons-material/Menu';
-import logoDark from '../../assets/LOGO_negrito.png';
-import logoLight from '../../assets/LOGO.png';
+import logoDark from '../../assets/logo_dark.png';
+import logoLight from '../../assets/logo_light.png';
 
 import { useTranslation } from 'react-i18next';
 
@@ -36,28 +37,44 @@ function ReactNavbar(props: { loggedIn: boolean }) {
         t('initial.gallery'),
         t('initial.artists'),
         t('initial.contact'),
+        props.loggedIn ? t('initial.login') : t('initial.profile'),
     ];
-    const pagesLinks = ['/gallery', '/artists', '/contact'];
-    const lastpage = ['login', t('initial.profile')];
-    const lastpageLinks = ['/login', '/profile'];
+    const pagesLinks = [
+        '/gallery',
+        '/artists',
+        '/contact',
+        props.loggedIn ? '/profile' : '/login',
+    ];
 
-    const checkRoute = (route: string, page: string) => {
-        const re = RegExp(route);
-        return re.test(page);
-    };
+    const linkComponents = pages.map((page, index) => (
+        <Typography
+            variant="h5"
+            component={Link}
+            to={pagesLinks[index]}
+            className="font-poppins"
+            sx={{
+                flex: '1 1 auto',
+                ...(pagesLinks[index] === location.pathname
+                    ? { fontWeight: 'bold' }
+                    : { color: theme.palette.text.secondary }),
+            }}
+            key={page}>
+            {page}
+        </Typography>
+    ));
 
     return (
         <AppBar
             position="static"
             elevation={0}
             sx={{
-                fontSize: '1.2rem',
                 backgroundColor: theme.palette.background.default,
             }}>
             <Toolbar disableGutters sx={{ mb: 2, py: 8, paddingX: padX }}>
                 <Link to="/">
                     <Box
                         component="img"
+                        alt="Logo"
                         sx={{
                             content: `url(${theme.palette.mode === 'dark' ? logoLight : logoDark})`,
                             height: { xs: 60, md: 120 },
@@ -72,44 +89,7 @@ function ReactNavbar(props: { loggedIn: boolean }) {
                         display: { xs: 'none', md: 'flex' },
                         textAlign: 'right',
                     }}>
-                    <Grid container>
-                        {pages.map((page, index) => (
-                            <Grid
-                                xs={3}
-                                sx={
-                                    checkRoute(
-                                        pagesLinks[index],
-                                        location.pathname
-                                    )
-                                        ? { fontWeight: 'bold' }
-                                        : {
-                                              color: theme.palette.text
-                                                  .secondary,
-                                          }
-                                }
-                                key={page}>
-                                <Link
-                                    to={pagesLinks[index]}
-                                    className="font-poppins">
-                                    {page}
-                                </Link>
-                            </Grid>
-                        ))}
-                        <Grid
-                            xs={3}
-                            sx={
-                                location.pathname ==
-                                lastpageLinks[props.loggedIn ? 1 : 0]
-                                    ? { fontWeight: 'bold' }
-                                    : { color: theme.palette.text.secondary }
-                            }>
-                            <Link
-                                to={lastpageLinks[props.loggedIn ? 1 : 0]}
-                                className="font-poppins">
-                                {lastpage[props.loggedIn ? 1 : 0]}
-                            </Link>
-                        </Grid>
-                    </Grid>
+                    {linkComponents}
                 </Box>
 
                 <Box
@@ -139,44 +119,17 @@ function ReactNavbar(props: { loggedIn: boolean }) {
                     paddingX: padX,
                 }}
                 spacing={2}>
-                {pages.map((page, index) => (
+                {linkComponents.map((link) => (
                     <Grid
                         xs={12}
-                        key={page}
                         sx={{
                             py: 1,
                             borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
                         }}
                         className="hover:bg-gray-50">
-                        <Link to={pagesLinks[index]} className="font-poppins">
-                            <Box
-                                component={'div'}
-                                sx={
-                                    location.pathname == pagesLinks[index]
-                                        ? { fontWeight: 'bold' }
-                                        : {}
-                                }>
-                                {page}
-                            </Box>
-                        </Link>
+                        {link}
                     </Grid>
                 ))}
-                <Grid xs={12} sx={{ py: 1 }} className="hover:bg-gray-50">
-                    <Link
-                        to={lastpageLinks[props.loggedIn ? 1 : 0]}
-                        className="font-poppins">
-                        <Box
-                            component={'div'}
-                            sx={
-                                location.pathname ==
-                                lastpageLinks[props.loggedIn ? 1 : 0]
-                                    ? { fontWeight: 'bold' }
-                                    : {}
-                            }>
-                            {lastpage[props.loggedIn ? 1 : 0]}
-                        </Box>
-                    </Link>
-                </Grid>
             </Grid>
         </AppBar>
     );
