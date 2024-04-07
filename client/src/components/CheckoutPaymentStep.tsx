@@ -1,9 +1,9 @@
 import { Box, Button, Divider, Paper, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import PayPalComponent from './Payment/PayPalComponent';
-import MBWayComponent from './Payment/MBWayComponent';
-import MultibancoComponent from './Payment/MultibancoComponent';
+import PayPalComponent from './.Payment/PayPalComponent';
+import MBWayComponent from './.Payment/MBWayComponent';
+import MultibancoComponent from './.Payment/MultibancoComponent';
 
 const CheckoutStep4 = () => {
     const { t } = useTranslation();
