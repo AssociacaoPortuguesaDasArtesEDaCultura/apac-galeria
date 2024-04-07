@@ -65,7 +65,6 @@ function App() {
     //     return re.test(route);
     // };
     const { user, loggedIn } = useContext(FirebaseAuthContext);
-    console.log('APP: ', user, loggedIn);
 
     const colorMode = useMemo(
         () => ({
