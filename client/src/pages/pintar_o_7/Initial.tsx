@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
-import logoDark from '../../assets/LOGO_negrito.png';
+import logoDark from '../../assets/logo_dark.png';
 import { checkLink } from '../../fetchers';
 
 import useProductSearch from '../../hooks/useProductSearch';
