@@ -1,6 +1,17 @@
-import { Grid, Box, Divider, List, ListItem, Typography } from '@mui/material';
-import { useNavigate, Link } from 'react-router-dom';
+import {
+    Box,
+    Divider,
+    IconButton,
+    List,
+    ListItem,
+    Typography,
+} from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+import { Link } from 'react-router-dom';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import logo from '../../assets/logo_dark.png';
 import { useTranslation } from 'react-i18next';
 
@@ -17,6 +28,12 @@ const Footer = () => {
     }
 
     const { t } = useTranslation();
+    const socialMediaLinks = [
+        { url: "https://www.facebook.com/associacaoportuguesartecultura", icon: FacebookIcon },
+        { url: "https://www.instagram.com/galeriapintaro7/", icon: InstagramIcon },
+        { url: "https://www.youtube.com/@associacaoportuguesartecultura", icon: YouTubeIcon },
+        { url: "https://www.linkedin.com/company/associacaoportuguesaartesecultura/", icon: LinkedInIcon }
+    ]
 
     return (
         <Box
@@ -27,8 +44,6 @@ const Footer = () => {
                 paddingX: {
                     xs: '2rem',
                     sm: '4rem',
-                    md: '6rem',
-                    lg: '8rem',
                 },
             }}>
             <Grid container sx={{ paddingBottom: 5 }}>
@@ -52,43 +67,15 @@ const Footer = () => {
                             />
                         </ListItem>
                         <ListItem sx={{ paddingX: 0 }}>
-                            {/*<a
-                                target="_blank"
-                                href={
-                                    'https://www.facebook.com/associacaoportuguesartecultura'
-                                }>
-                                <FacebookIcon
-                                    sx={{ color: COLOR, margin: ICON_MARGIN }}
-                                />
-                            </a>*/}
-
-                            <a
-                                target="_blank"
-                                href={
-                                    'https://www.instagram.com/galeriapintaro7/'
-                                }>
-                                <InstagramIcon sx={{ margin: ICON_MARGIN }} />
-                            </a>
-
-                            {/*<a
-                                target="_blank"
-                                href={
-                                    'https://associacaoportuguesaartesecultura.pt/projetos/'
-                                }>
-                                <YouTubeIcon
-                                    sx={{ color: COLOR, margin: ICON_MARGIN }}
-                                />
-                            </a>
-
-                            <a
-                                target="_blank"
-                                href={
-                                    'https://associacaoportuguesaartesecultura.pt/projetos/'
-                                }>
-                                <LinkedInIcon
-                                    sx={{ color: COLOR, margin: ICON_MARGIN }}
-                                />
-                            </a>*/}
+                            {socialMediaLinks.map((link, index) => (
+                                <IconButton
+                                    key={index}
+                                    target="_blank"
+                                    href={link.url}
+                                >
+                                    <link.icon />
+                                </IconButton>
+                            ))}
                         </ListItem>
                     </List>
                 </Grid>
@@ -166,16 +153,15 @@ const Footer = () => {
                     display="flex"
                     alignItems="center"
                     justifyContent="center">
-                    <a
+                    <Typography
+                        color="primary"
+                        component="a"
                         target="_blank"
-                        href={'https://associacaoportuguesaartesecultura.pt/'}>
-                        <Typography
-                            color="primary"
-                            sx={{ textDecoration: 'underline' }}>
-                            {t('home.iniciative')} associação portuguesa das
-                            artes e da cultura &copy; {year}
-                        </Typography>
-                    </a>
+                        href="https://associacaoportuguesaartesecultura.pt/"
+                        sx={{ textDecoration: 'underline' }}
+                    >
+                        {t('home.iniciative')} associação portuguesa das artes e da cultura &copy; {year}
+                    </Typography>
                 </Grid>
             </Grid>
         </Box>
