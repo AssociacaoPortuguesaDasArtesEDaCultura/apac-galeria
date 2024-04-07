@@ -266,9 +266,7 @@ export default function ProfileInfo() {
     //   }
     // };
     //
-    return false ? (
-        <Spinner></Spinner>
-    ) : (
+    return (
         <Box
             // onSubmit={(e) => handleProfileSubmit(e)}
             // component="form"
