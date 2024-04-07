@@ -69,7 +69,8 @@ export const getProduct = async (id: string): Promise<Product> => {
 };
 
 export const saveUserInfo = async (user: User): Promise<void> => {
-    await setDoc(db.user(user.id), user);
+    console.log('Saving user ', user);
+    return setDoc(db.user(user.id), user).catch((a) => console.log(a));
 };
 
 export const saveProduct = async (product: Product): Promise<Product> => {

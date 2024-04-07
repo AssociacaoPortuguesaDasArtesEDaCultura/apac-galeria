@@ -28,15 +28,16 @@ const FirebaseAuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(
             auth,
             async (authenticatedUser) => {
+                setLoading(true);
                 if (authenticatedUser) {
-                    const user = await getUserInfo(authenticatedUser.uid);
-                    setUser(user);
-                    setLoading(false);
-                }
-                if (authenticatedUser === undefined) {
+                    const fetchedUser = await getUserInfo(
+                        authenticatedUser.uid
+                    );
+                    setUser(fetchedUser);
+                } else {
                     setUser(undefined);
-                    setLoading(false);
                 }
+                setLoading(false);
                 return () => {
                     if (unsubscribe) unsubscribe();
                 };

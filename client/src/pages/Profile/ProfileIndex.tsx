@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import ProfileThumbnail from '../../components/Profile/ProfileThumbnail';
 import { useContext } from 'react';
 import { FirebaseAuthContext } from '../../contexts/currentAuthUserContext';
+import { logOut } from '../../utils/firebase';
 
 export default function ProfileIndex() {
     const [t] = useTranslation();
@@ -101,9 +102,7 @@ export default function ProfileIndex() {
                     className="inline-block"
                     to="/login"
                     onClick={() => {
-                        localStorage.removeItem('loggedIn');
-                        localStorage.removeItem('user');
-                        localStorage.removeItem('token');
+                        logOut();
                     }}>
                     <ProfileThumbnail
                         title={t('profile.logout')}

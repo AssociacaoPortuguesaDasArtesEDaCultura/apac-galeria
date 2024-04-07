@@ -6,7 +6,6 @@ import {
     Toolbar,
     useTheme,
 } from '@mui/material';
-import * as React from 'react';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import logoDark from '../../assets/LOGO_negrito.png';
@@ -15,10 +14,7 @@ import logoLight from '../../assets/LOGO.png';
 import { useTranslation } from 'react-i18next';
 
 import { Link, useLocation } from 'react-router-dom';
-
-type ReactNavbarProps = {
-    loggedIn: boolean;
-};
+import { useEffect, useState } from 'react';
 
 const padX = {
     xs: '2rem',
@@ -27,10 +23,12 @@ const padX = {
     lg: '8rem',
 };
 
-function ReactNavbar(props: ReactNavbarProps) {
+function ReactNavbar(props: { loggedIn: boolean }) {
+    useEffect(() => {}, [props.loggedIn]);
+
     const theme = useTheme();
     const location = useLocation();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const { t } = useTranslation();
 

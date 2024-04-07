@@ -113,8 +113,8 @@ const Register = () => {
         } else {
             disableAlerts();
             // Use Firebase registration function
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
+            await createUserWithEmailAndPassword(auth, email, password)
+                .then(async (userCredential) => {
                     const user = userCredential.user;
                     const customer = newCustomer(
                         user.uid,
@@ -130,7 +130,7 @@ const Register = () => {
                         }
                     );
 
-                    saveUserInfo(customer);
+                    await saveUserInfo(customer);
                     navigate('/gallery');
                     return;
                 })

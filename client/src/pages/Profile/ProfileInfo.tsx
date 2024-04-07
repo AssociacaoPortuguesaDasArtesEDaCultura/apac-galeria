@@ -21,7 +21,6 @@ const TODAY_MINUS_18_YEARS: Dayjs = dayjs().subtract(18, 'year');
 export default function ProfileInfo() {
     const [t] = useTranslation();
     console.log('here');
-    const [loadingUser, setLoadingUser] = useState(true);
     const [editing, setEditing] = useState(false);
     const { user } = useContext(FirebaseAuthContext);
 
@@ -267,9 +266,7 @@ export default function ProfileInfo() {
     //   }
     // };
     //
-    return loadingUser ? (
-        <Spinner></Spinner>
-    ) : (
+    return (
         <Box
             // onSubmit={(e) => handleProfileSubmit(e)}
             // component="form"
