@@ -14,7 +14,7 @@ import logoLight from '../../assets/LOGO.png';
 import { useTranslation } from 'react-i18next';
 
 import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const padX = {
   xs: '2rem',
@@ -23,7 +23,9 @@ const padX = {
   lg: '8rem',
 };
 
-function ReactNavbar(loggedIn: boolean) {
+function ReactNavbar(props: { loggedIn: boolean }) {
+  useEffect(() => { }, [props.loggedIn]);
+
   const theme = useTheme();
   const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -97,14 +99,14 @@ function ReactNavbar(loggedIn: boolean) {
               xs={3}
               sx={
                 location.pathname ==
-                  lastpageLinks[loggedIn ? 1 : 0]
+                  lastpageLinks[props.loggedIn ? 1 : 0]
                   ? { fontWeight: 'bold' }
                   : { color: theme.palette.text.secondary }
               }>
               <Link
-                to={lastpageLinks[loggedIn ? 1 : 0]}
+                to={lastpageLinks[props.loggedIn ? 1 : 0]}
                 className="font-poppins">
-                {lastpage[loggedIn ? 1 : 0]}
+                {lastpage[props.loggedIn ? 1 : 0]}
               </Link>
             </Grid>
           </Grid>
@@ -161,17 +163,17 @@ function ReactNavbar(loggedIn: boolean) {
         ))}
         <Grid xs={12} sx={{ py: 1 }} className="hover:bg-gray-50">
           <Link
-            to={lastpageLinks[loggedIn ? 1 : 0]}
+            to={lastpageLinks[props.loggedIn ? 1 : 0]}
             className="font-poppins">
             <Box
               component={'div'}
               sx={
                 location.pathname ==
-                  lastpageLinks[loggedIn ? 1 : 0]
+                  lastpageLinks[props.loggedIn ? 1 : 0]
                   ? { fontWeight: 'bold' }
                   : {}
               }>
-              {lastpage[loggedIn ? 1 : 0]}
+              {lastpage[props.loggedIn ? 1 : 0]}
             </Box>
           </Link>
         </Grid>
