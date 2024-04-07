@@ -1,7 +1,7 @@
 import { Grid, Box, Divider, List, ListItem, Typography } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import logo from '../../assets/LOGO.png';
+import logo from '../../assets/logo_dark.png';
 import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
