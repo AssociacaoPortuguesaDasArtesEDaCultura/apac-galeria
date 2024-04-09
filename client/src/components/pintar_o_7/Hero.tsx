@@ -8,7 +8,7 @@ type HeroProps = {
     fontColor: string;
 };
 
-export default function Hero(props: HeroProps) {
+const Hero = (props: HeroProps) => {
     return (
         <Box
             component="div"
@@ -57,4 +57,6 @@ export default function Hero(props: HeroProps) {
             </Box>
         </Box>
     );
-}
+};
+
+export default Hero;

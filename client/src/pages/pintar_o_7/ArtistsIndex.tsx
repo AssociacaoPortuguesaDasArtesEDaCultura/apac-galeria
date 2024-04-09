@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -14,7 +14,6 @@ import { SellerQuery } from '../../types/query';
 
 export default function ArtistsIndexPage() {
     const [t] = useTranslation();
-    const [artistPage, setArtistPage] = useState(1);
     const [artistFilter, setArtistFilter] = useState('');
     const [artistQuery, setArtistQuery] = useState<SellerQuery>(() => ({
         limit: 12,

@@ -29,11 +29,23 @@ const Footer = () => {
 
     const { t } = useTranslation();
     const socialMediaLinks = [
-        { url: "https://www.facebook.com/associacaoportuguesartecultura", icon: FacebookIcon },
-        { url: "https://www.instagram.com/galeriapintaro7/", icon: InstagramIcon },
-        { url: "https://www.youtube.com/@associacaoportuguesartecultura", icon: YouTubeIcon },
-        { url: "https://www.linkedin.com/company/associacaoportuguesaartesecultura/", icon: LinkedInIcon }
-    ]
+        {
+            url: 'https://www.facebook.com/associacaoportuguesartecultura',
+            icon: FacebookIcon,
+        },
+        {
+            url: 'https://www.instagram.com/galeriapintaro7/',
+            icon: InstagramIcon,
+        },
+        {
+            url: 'https://www.youtube.com/@associacaoportuguesartecultura',
+            icon: YouTubeIcon,
+        },
+        {
+            url: 'https://www.linkedin.com/company/associacaoportuguesaartesecultura/',
+            icon: LinkedInIcon,
+        },
+    ];
 
     return (
         <Box
@@ -71,8 +83,7 @@ const Footer = () => {
                                 <IconButton
                                     key={index}
                                     target="_blank"
-                                    href={link.url}
-                                >
+                                    href={link.url}>
                                     <link.icon />
                                 </IconButton>
                             ))}
@@ -158,9 +169,9 @@ const Footer = () => {
                         component="a"
                         target="_blank"
                         href="https://associacaoportuguesaartesecultura.pt/"
-                        sx={{ textDecoration: 'underline' }}
-                    >
-                        {t('home.iniciative')} associação portuguesa das artes e da cultura &copy; {year}
+                        sx={{ textDecoration: 'underline' }}>
+                        {t('home.iniciative')} associação portuguesa das artes e
+                        da cultura &copy; {year}
                     </Typography>
                 </Grid>
             </Grid>
