@@ -1,8 +1,8 @@
-import { Grid, Box, Divider, List, ListItem, Typography } from '@mui/material';
-import { useNavigate, Link } from 'react-router-dom';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import logo from '../../assets/LOGO.png';
+import { Box, Divider, Grid, List, ListItem, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import logo from '../../assets/LOGO.png';
 
 const Footer = () => {
     const ICON_MARGIN = 0.5;

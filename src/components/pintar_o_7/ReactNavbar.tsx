@@ -1,20 +1,18 @@
+import MenuIcon from '@mui/icons-material/Menu';
 import {
     AppBar,
     Box,
+    Divider,
     Grid,
     IconButton,
     Toolbar,
     useTheme,
 } from '@mui/material';
-
-import MenuIcon from '@mui/icons-material/Menu';
-import logoDark from '../../assets/LOGO_negrito.png';
-import logoLight from '../../assets/LOGO.png';
-
-import { useTranslation } from 'react-i18next';
-
-import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link, useLocation } from 'react-router-dom';
+import logoLight from '../../assets/LOGO.png';
+import logoDark from '../../assets/LOGO_negrito.png';
 
 const padX = {
     xs: '2rem',
@@ -178,6 +176,7 @@ function ReactNavbar(props: { loggedIn: boolean }) {
                     </Link>
                 </Grid>
             </Grid>
+            <Divider aria-hidden="true" />
         </AppBar>
     );
 }
