@@ -63,7 +63,7 @@ function App() {
       toggleColorMode: () =>
         setMode((prevMode) => (prevMode === "light" ? "dark" : "light")),
     }),
-    []
+    [],
   );
 
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
