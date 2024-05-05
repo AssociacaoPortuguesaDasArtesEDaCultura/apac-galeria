@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-
-import { Alert, Box, CircularProgress, Stack, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { NotificationType } from '../../types/notification';
-import NotificationPaper from '../../components/Profile/NotificationPaper';
-import { getNotifications } from '../../fetchers';
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Alert, Box, CircularProgress, Stack, Typography } from "@mui/material";
+import NotificationPaper from "../../components/Profile/NotificationPaper";
+import { NotificationType } from "../../types/notification";
 
 /* const MockData: NotificationType[] = [
     {
@@ -45,74 +43,72 @@ import { getNotifications } from '../../fetchers';
 ]; */
 
 export default function Notifications() {
-    const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>('');
-    const [notifications, setNotifications] = useState<NotificationType[]>([]);
+  const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            const fetchData = async () => {
-                setIsLoading(true);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const fetchData = async () => {
+        setIsLoading(true);
 
-                try {
-                    const data = await getNotifications(token);
-                    if (data) {
-                        setNotifications(data);
-                    }
-                } catch (e: any) {
-                    setError(e.message);
-                } finally {
-                    setIsLoading(false);
-                }
-            };
-            fetchData();
+        try {
+          const data = await getNotifications(token);
+          if (data) {
+            setNotifications(data);
+          }
+        } catch (e: any) {
+          setError(e.message);
+        } finally {
+          setIsLoading(false);
         }
-    }, []);
+      };
+      fetchData();
+    }
+  }, []);
 
-    return (
-        <Box
+  return (
+    <Box
+      component="div"
+      sx={{
+        paddingY: "2rem",
+        paddingX: {
+          xs: "2rem",
+          sm: "4rem",
+          md: "6rem",
+          lg: "20%",
+        },
+      }}
+    >
+      <Stack
+        direction="column"
+        spacing={4}
+        alignItems={"center"}
+        justifyContent={"flex-start"}
+      >
+        <Typography variant="h3">{t("profile.notifications.title")}</Typography>
+
+        {notifications &&
+          notifications.map((notification, index) => (
+            <NotificationPaper key={index} notification={notification} />
+          ))}
+        {error !== "" && <Alert severity="error">{error}</Alert>}
+        {isLoading && (
+          <Box
             component="div"
             sx={{
-                paddingY: '2rem',
-                paddingX: {
-                    xs: '2rem',
-                    sm: '4rem',
-                    md: '6rem',
-                    lg: '20%',
-                },
-            }}>
-            <Stack
-                direction="column"
-                spacing={4}
-                alignItems={'center'}
-                justifyContent={'flex-start'}>
-                <Typography variant="h3">
-                    {t('profile.notifications.title')}
-                </Typography>
-
-                {notifications &&
-                    notifications.map((notification, index) => (
-                        <NotificationPaper
-                            key={index}
-                            notification={notification}
-                        />
-                    ))}
-                {error !== '' && <Alert severity="error">{error}</Alert>}
-                {isLoading && (
-                    <Box
-                        component="div"
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginY: '2rem',
-                        }}>
-                        <CircularProgress />
-                    </Box>
-                )}
-            </Stack>
-        </Box>
-    );
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginY: "2rem",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+      </Stack>
+    </Box>
+  );
 }
