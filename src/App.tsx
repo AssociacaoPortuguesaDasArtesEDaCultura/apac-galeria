@@ -17,7 +17,6 @@ import NewProduct from "./pages/Seller/NewProduct";
 // import ChatPage from './components/experinecia_chat/ChatPage';
 import NewSeller from "./pages/Seller/NewSeller";
 import Products from "./pages/Seller/Products";
-import AdminPrivateRoutes from "./routes/AdminPrivateRoutes";
 import PrivateRoutes from "./routes/PrivateRoutes";
 import SellerPrivateRoutes from "./routes/SellerPrivateRoutes";
 import { ColorModeContext, getDesignTokens } from "./theme";
@@ -111,8 +110,6 @@ function App() {
     { path: "/profile/notifications", element: <Notifications /> },
   ];
 
-  const adminRoutes = [{ path: "/dashboard", element: <Dashboard /> }];
-
   const sellerRoutes = [
     {
       path: "/profile/products",
@@ -170,9 +167,6 @@ function App() {
                     }
                   >
                     {mapRoutes(sellerRoutes)}
-                  </Route>
-                  <Route element={<AdminPrivateRoutes />}>
-                    {mapRoutes(adminRoutes)}
                   </Route>
                 </Routes>
               </Suspense>
