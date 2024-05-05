@@ -10,7 +10,6 @@ import Footer from "./components/pintar_o_7/Footer";
 import ReactNavbar from "./components/pintar_o_7/ReactNavbar";
 import ThemeSwitcher from "./components/ThemeSwitcher";
 import { FirebaseAuthContext } from "./contexts/currentAuthUserContext";
-import Requests from "./pages/Administrator/Requests";
 import ProfileIndex from "./pages/Profile/ProfileIndex";
 import ProfileInfo from "./pages/Profile/ProfileInfo";
 // import ProfileOrderHistory from './pages/Profile/ProfileOrderHistory';
@@ -36,7 +35,6 @@ const PageNotFound = lazy(() => import("./pages/NotFound"));
 const InfoPage = lazy(() => import("./pages/InfoPage"));
 const ContactPage = lazy(() => import("./pages/pintar_o_7/Contact"));
 const CartBadge = lazy(() => import("./components/CartBadge"));
-const Dashboard = lazy(() => import("./pages/Administrator/Dashboard"));
 const Notifications = lazy(() => import("./pages/Profile/Notifications"));
 
 type RouteType = {
@@ -66,7 +64,7 @@ function App() {
       toggleColorMode: () =>
         setMode((prevMode) => (prevMode === "light" ? "dark" : "light")),
     }),
-    [],
+    []
   );
 
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
@@ -126,7 +124,6 @@ function App() {
       element: <NewProduct />,
       authLevel: "seller",
     },
-    { path: "/requests", element: <Requests />, authLevel: "seller" },
   ];
 
   return (
