@@ -19,6 +19,8 @@ jobs:
           run_install: |
             - recursive: false
               args: [--frozen-lockfile, --strict-peer-dependencies]
+      - name: Linting
+        run: pnpm lint
       - name: Build project
         run: pnpm build
         working-directory: ${{ github.workspace }}
